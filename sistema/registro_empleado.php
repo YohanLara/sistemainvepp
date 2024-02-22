@@ -40,7 +40,7 @@ if (!empty($_POST)) {
                                     La cedula ya existe
                                 </div>';
         } else {
-            $query_insert = mysqli_query($conexion, "INSERT INTO empleados(cedula,nombres,apellidos,proceso, usuario_id) values ('$cedula', '$nombres', '$apellidos', '$proceso', '$usuario_id')");
+            $query_insert = mysqli_query($conexion, "INSERT INTO empleados(cedula,nombres,apellidos,proceso, usuario_id) values ($cedula, '$nombres', '$apellidos', '$proceso', '$usuario_id')");
             if ($query_insert) {
                 $alert = '<div class="alert alert-success" role="alert">
                                     Cliente Registrado

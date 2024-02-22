@@ -363,7 +363,7 @@ $('.view_factura').click(function(e) {
 
   generarPDF(codCliente,noFactura);
 });
-
+// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Cambiar contraseña
 $('.newPass').keyup(function() {
   validaPass();
@@ -381,7 +381,7 @@ $('#frmChangePass').submit(function(e){
     $('.alertChangePass').slideDown();
     return false;
     }
-  if (passNuevo.length < 5) {
+  if (passNuevo.length < 3) {
   $('.alertChangePass').html('<p style="color:orangered;">Las contraseñas deben contener como mínimo 5 caracteres');
   $('.alertChangePass').slideDown();
   return false;
@@ -403,11 +403,10 @@ $('#frmChangePass').submit(function(e){
         $('.alertChangePass').slideDown();
       }
     },
-    error: function(error) {
-    }
+  
   });
 });
-
+// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 $(".confirmar").submit(function(e) {
   e.preventDefault();
   Swal.fire({

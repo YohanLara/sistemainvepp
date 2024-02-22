@@ -21,11 +21,36 @@
 							<th>NOMBRES</th>
 							<th>APELLIDOS</th>
 							<th>PROCESO</th>	
+							<?php if ($_SESSION['rol'] == 1) { ?>
 							<th>ACCIONES</th>
-						
+							<?php } ?>
 						</tr>
 					</thead>
 					<tbody>
+					<?php
+						include "../conexion.php";
+
+						$query = mysqli_query($conexion, "SELECT * FROM empleados");
+						$result = mysqli_num_rows($query);
+						if ($result > 0) {
+							while ($data = mysqli_fetch_assoc($query)) { ?>
+								<tr>
+									<td><?php echo $data['id_empleado']; ?></td>
+									<td><?php echo $data['cedula']; ?></td>
+									<td><?php echo $data['nombres']; ?></td>
+									<td><?php echo $data['apellidos']; ?></td>
+									<td><?php echo $data['proceso']; ?></td>
+									<?php if ($_SESSION['rol'] == 1) { ?>
+									<td>
+										<a href="editar_empleado.php?id_empleado=<?php echo $data['id_empleado']; ?>" class="btn btn-success"><i class='fas fa-edit'></i></a>
+										<form action="eliminar_empleado.php?id_empleado=<?php echo $data['id_empleado']; ?>" method="post" class="confirmar d-inline">
+											<button class="btn btn-danger" type="submit"><i class='fas fa-trash-alt'></i> </button>
+										</form>
+									</td>
+									<?php } ?>
+								</tr>
+						<?php }
+						} ?>
 						
 					</tbody>
 

@@ -12,7 +12,7 @@
 	<div class="row">
 
 		<!-- contador usuarios -->
-		<a class="col-xl-3 col-md-6 mb-4" href="">
+		<a class="col-xl-3 col-md-6 mb-4" href="lista_usuarios.php">
 			<div class="card border-left-primary shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
@@ -29,13 +29,13 @@
 		</a>
 
 		<!-- contador empleados-->
-		<a class="col-xl-3 col-md-6 mb-4" href="lista_cliente.php">
+		<a class="col-xl-3 col-md-6 mb-4" href="lista_empleado.php">
 			<div class="card border-left-success shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-success text-uppercase mb-1">Empleados</div>
-							<div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $data['count_empleados']; ?></div>
 						</div>
 						<div class="col-auto">
 							<i class="fas fa-users fa-2x text-gray-300"></i>
@@ -104,16 +104,16 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label>Nombre: <strong></strong></label>
+                    <label>Nombre: <strong><?php echo $_SESSION['nombre']; ?></strong></label>
                 </div>
                 <div class="form-group">
-                    <label>Correo: <strong></strong></label>
+                    <label>Correo: <strong><?PHP echo $_SESSION['email'];?></strong></label>
                 </div>
                 <div class="form-group">
-                    <label>Rol: <strong></strong></label>
+                    <label>Rol: <strong><?php echo $_SESSION['rol_name'];?></strong></label>
                 </div>
                 <div class="form-group">
-                    <label>Usuario: <strong></strong></label>
+                    <label>Usuario: <strong><?php echo $_SESSION['user']; ?></strong></label>
                 </div>
             </div>
         </div>
