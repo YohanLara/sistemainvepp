@@ -33,14 +33,34 @@ ALTER TABLE `rol`
 INSERT INTO `usuario` (`idusuario`, `nombre`, `correo`, `usuario`, `clave`, `rol`) VALUES
 (1, 'Yohan v', 'sistemas@pointerinstrument.vom ','Klarat', '06233bc2fb3e609a065cfc435337cabd', 1);
 
+(2 'Yohan v', 'sistemas@pointeriinstrument.com', 'Klarat', '202cb962ac59075b964b07152d234b70',	2);
+(3 'Kevin Lara',	'Lara_9812@hotmail.com', 'larat1', '25f9e794323b453885f5181f1b624d0b',	1);
+-- clave usuario 2 es 123  y usuario 3 es 123456789
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`idusuario`);
 
   ALTER TABLE `usuario`
   MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
-  
+ ---*-*-*-*-*-*-**-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* 
 DELIMITER $$
+CREATE PROCEDURE `actualizar_cantidad_producto` (IN n_cantidad INT, IN codigo INT)  
+BEGIN
+    DECLARE nueva_cantidad INT;
+
+    SELECT cantidad INTO nueva_cantidad FROM producto WHERE codproducto = codigo;
+
+    SET nueva_cantidad = nueva_cantidad + n_cantidad;
+
+    UPDATE producto SET cantidad = nueva_cantidad WHERE codproducto = codigo;
+
+    SELECT nueva_cantidad;
+END$$
+DELIMITER ;
+
+
+
+
 CREATE PROCEDURE `data` ()
 BEGIN
   DECLARE count_usuario INT;
@@ -49,11 +69,12 @@ BEGIN
   
   SELECT COUNT(*) INTO count_usuario FROM usuario;
   SELECT COUNT(*) INTO count_empleados FROM empleados;
+   SELECT COUNT(*) INTO count_productos FROM producto;
 
   SELECT count_usuario, count_empleados ;
 END$$
 DELIMITER ;
-
+-- -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 CREATE TABLE `empleados` (
   `id_empleado` int(11) NOT NULL,
@@ -77,6 +98,35 @@ ALTER TABLE `empleados`
 
 ALTER TABLE `empleados`
   MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+
+
+
+  CREATE TABLE `producto` (
+  `codproducto` int(11) NOT NULL,
+  `descripcion` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `talla` varchar(2) NULL,
+  `usuario_id` int(11) NOT NULL
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+
+
+INSERT INTO `producto` (`codproducto`, `descripcion`, `cantidad`, `talla`, `usuario_id`) VALUES
+(1, 'Tapabocas', 1, '', 1),
+(2, 'Gafas de seguridad', 1, '', 1),
+(3, 'Botas', 1, '39', 1),
+(4, 'Overol', 3, '38', 1),
+(5, 'Guantes', 3, '8', 1);
+
+
+ALTER TABLE `producto`
+  ADD PRIMARY KEY (`codproducto`);
+--
+ALTER TABLE `producto`
+  MODIFY `codproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 ---*-*-*-**-**-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/-*-*-*-*-*-*-*-*-*-*-*-*-*--*+-*-*/-*-*-*-*-*-*-*-*-*-*-**
 
@@ -141,3 +191,17 @@ BEGIN
         SELECT 0 AS 'Error: No hay productos para asignar';
     END IF;
 END$$
+
+CREATE TABLE `entradas` (
+  `correlativo` int(11) NOT NULL,
+  `codproducto` int(11) NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  `cantidad` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+ALTER TABLE `entradas`
+  ADD PRIMARY KEY (`correlativo`);
+  
+ALTER TABLE `entradas`
+  MODIFY `correlativo` int(11) NOT NULL AUTO_INCREMENT;

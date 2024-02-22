@@ -5,7 +5,7 @@
 
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">Clientes</h1>
+		<h1 class="h3 mb-0 text-gray-800">Empleados</h1>
 		<a href="registro_empleado.php" class="btn btn-primary">Nuevo</a>
 	</div>
 
