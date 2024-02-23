@@ -3,9 +3,7 @@ session_start();
 if (empty($_SESSION['active'])) {
 	header('location: ../');
 }
-
-
-
+include "includes/functions.php";
 
 
 ?>
@@ -60,9 +58,10 @@ if (empty($_SESSION['active'])) {
 						<i class="fa fa-bars"></i>
 					</button>
 					<div class="input-group">
-
-			
+					<h6>Sistema de Inventario </h6>
+					<p class="ml-auto"><strong>Colombia, </strong><?php echo fechaColombia(); ?></p>
 					</div>
+					
 
 				<!-- Barra de navegación de la barra superior -->
 					<ul class="navbar-nav ml-auto">

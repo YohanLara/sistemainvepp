@@ -39,17 +39,20 @@ if (!empty($_POST)) {
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
-        <a href="lista_usuarios.php" class="btn btn-primary">Regresar</a>
-    </div>
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
+    <a href="lista_usuarios.php" class="btn btn-primary">Regresar</a>
+  </div>
 
-    <!-- Content Row -->
-    <div class="row">
-        <div class="col-lg-6 m-auto">
-            <form action="" method="post" autocomplete="off">
+    <div class="col-lg-6 m-auto">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+         Registrar Usuario
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
             <?php echo isset($alert) ? $alert : ''; ?>
+        
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" placeholder="Ingrese Nombre" name="nombre" id="nombre">

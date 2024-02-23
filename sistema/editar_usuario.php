@@ -59,22 +59,23 @@ if ($result_sql == 0) {
   }
 }
 ?>
-
+<!----------- EDITAR REGISTRO ------------>
 <div class="container-fluid">
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
-        <a href="lista_usuarios.php" class="btn btn-primary">Regresar</a>
-    </div>
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
+    <a href="lista_usuarios.php" class="btn btn-primary">Regresar</a>
+  </div>
 
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 m-auto">
-                <form class="" action="" method="post">
-                    <?php echo isset($alert) ? $alert : ''; ?>
-                    <input type="hidden" name="id" value="<?php echo $idusuario; ?>">
-                    <div class="form-group">
+    <div class="col-lg-6 m-auto">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+         Editar Usuario
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            <?php echo isset($alert) ? $alert : ''; ?>
+            <input type="hidden" name="idusuario" value="<?php echo $idusuario; ?>">
+                <div class="form-group">
                         <label for="nombre">Nombre</label>
                         <input type="text" placeholder="Ingrese nombre" class="form-control" name="nombre" id="nombre" value="<?php echo $nombre; ?>">
                     </div>

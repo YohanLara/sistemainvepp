@@ -35,11 +35,17 @@ if (!empty($_POST)) {
         <a href="lista_productos.php" class="btn btn-primary">Regresar</a>
     </div>
       
-    <div class="row">
+  
    
         <div class="col-lg-6 m-auto">
+        <div class="card">
+        <div class="card-header bg-primary text-white">
+         Registrar Producto
+        </div>
+        <div class="card-body">
+        <form action="" method="post" autocomplete="off">
         <?php echo isset($alert) ? $alert : ''; ?>
-            <form action="" method="post" autocomplete="off">
+          
                 <div class="form-group">
                     <label for="descripcion">Descripcion</label>
                     <input type="text" placeholder="Ingrese nombre del producto" name="descripcion" id="descripcion" class="form-control">
@@ -56,7 +62,7 @@ if (!empty($_POST)) {
             </form>
         </div>
     </div>
-
+    </div>
 </div>
 
 <?php include_once "includes/footer.php"; ?>

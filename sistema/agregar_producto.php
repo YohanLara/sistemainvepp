@@ -4,11 +4,11 @@ include "../conexion.php";
 
 
 if (empty($_REQUEST['codproducto'])) {
-    header("Location: lista_productos.php");
+    // header("Location: lista_productos.php");
 } else {
     $id_producto = $_REQUEST['codproducto'];
     if (!is_numeric($id_producto)) {
-        header("Location: lista_productos.php");
+        // header("Location: lista_productos.php");
     }
     $query_producto = mysqli_query($conexion, "SELECT codproducto, descripcion, cantidad FROM producto WHERE codproducto = $id_producto");
     $result_producto = mysqli_num_rows($query_producto);
@@ -16,7 +16,7 @@ if (empty($_REQUEST['codproducto'])) {
     if ($result_producto > 0) {
         $data_producto = mysqli_fetch_assoc($query_producto);
     } else {
-        header("Location: lista_productos.php");
+        // header("Location: lista_productos.php");
     }
 }
 
@@ -54,14 +54,23 @@ if (!empty($_POST)) {
 }
 ?>
 
-<!-- Begin Page Content -->
+<!--------------------------------------------AGREGAR PRODUCTO----------------------------------------------->
+
 <div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
+    <a href="lista_productos.php" class="btn btn-primary">Regresar</a>
+  </div>
 
-    <div class="row">
-        <div class="col-lg-6 m-auto">
-            <form action="" method="post">
-                <?php echo isset($alert) ? $alert : ''; ?>
-
+    <div class="col-lg-6 m-auto">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Añadir cantidades
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            <?php echo isset($alert) ? $alert : ''; ?>
+        
                 <div class="form-group">
                     <label for="cantidad">Cantidad de productos disponibles</label>
                     <input type="number" class="form-control" value="<?php echo $data_producto['cantidad']; ?>" disabled>
@@ -73,11 +82,11 @@ if (!empty($_POST)) {
                 </div>
 
                 <input type="submit" value="Actualizar" class="btn btn-primary">
-                <a href="lista_productos.php" class="btn btn-danger">Regresar</a>
             </form>
         </div>
     </div>
-
+</div>
+</div>
 </div>
 <!-- /.container-fluid -->
 

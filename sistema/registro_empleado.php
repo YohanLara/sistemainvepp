@@ -59,17 +59,21 @@ if (!empty($_POST)) {
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
-        <a href="lista_empleado.php" class="btn btn-primary">Regresar</a>
-    </div>
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
+    <a href="lista_empleado.php" class="btn btn-primary">Regresar</a>
+  </div>
 
-    <!-- Content Row -->
-    <div class="row">
-        <div class="col-lg-6 m-auto">
-            <form action="" method="post" autocomplete="off">
-                <?php echo isset($alert) ? $alert : ''; ?>
+    <div class="col-lg-6 m-auto">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+         Ragistrar Empleado
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            <?php echo isset($alert) ? $alert : ''; ?>
+        
                 <div class="form-group">
                     <label for="cedula">Cedula</label>
                     <input type="number" placeholder="Ingrese Cedula" name="cedula" id="cedula" class="form-control">
@@ -91,7 +95,7 @@ if (!empty($_POST)) {
         </div>
     </div>
 
-
+    </div>
 </div>
 <!-- /.container-fluid -->
 

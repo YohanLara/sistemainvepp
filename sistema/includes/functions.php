@@ -1,6 +1,8 @@
-<?php
 
-	function fechaPeru(){
+<?php
+	date_default_timezone_set('America/Bogota');
+
+	function fechaColombia(){
 		$mes = array("","Enero",
 					  "Febrero",
 					  "Marzo",
@@ -15,6 +17,4 @@
 					  "Diciembre");
 		return date('d')." de ". $mes[date('n')] . " de " . date('Y');
 	}
-
-
- ?>
+?>

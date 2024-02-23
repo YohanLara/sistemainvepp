@@ -32,9 +32,10 @@ if (!empty($_POST)) {
 
       if ($sql_update) {
         $alert = '<div class="alert alert-success" role="alert">
-        Cliente Actualizado correctamente </div>';
+        Empleado Actualizado correctamente </div>';
       } else {
-        $alert = '<p class"error">Error al Actualizar el Cliente</p>';
+        $alert = '<div class="alert alert-danger" role="alert">
+        Error al Actualizar el Empleado</div>';
       }
     }
   }
@@ -56,17 +57,24 @@ if ($result_sql == 0) {
   }
 }
 ?>
+
+<!----------------------------------------- VISTA PARA EDITAR EMPLEADO---------------------------------------->
 <div class="container-fluid">
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Panel de Administración</h1>
     <a href="lista_empleado.php" class="btn btn-primary">Regresar</a>
   </div>
 
-  <div class="container-fluid">
-    <div class="row">
+
       <div class="col-lg-6 m-auto">
-        <form class="" action="" method="post">
+      <div class="card">
+      <div class="card-header bg-primary text-white">
+         Editar Empleado
+        </div>
+        <div class="card-body">
+        <form action="" method="post">
           <?php echo isset($alert) ? $alert : ''; ?>
+          
           <input type="hidden" name="id_empleado" value="<?php echo $id_empleado; ?>">
           <div class="form-group">
             <label for="cedula">Cedula</label>
@@ -84,7 +92,7 @@ if ($result_sql == 0) {
             <label for="proceso">Proceso</label>
             <input type="text" placeholder="Ingrese Proceso" name="proceso" class="form-control" id="proceso" value="<?php echo $proceso; ?>">
           </div>
-          <button type="submit" class="btn btn-primary"><i class="fas fa-user-edit"></i> Editar Cliente</button>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-user-edit"></i> Editar Empleado</button>
         </form>
       </div>
     </div>
