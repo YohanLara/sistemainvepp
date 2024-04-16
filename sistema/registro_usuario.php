@@ -3,7 +3,7 @@ include "../conexion.php";
 if (!empty($_POST)) {
     $alert = "";
     if (empty($_POST['nombre']) || empty($_POST['correo']) || empty($_POST['usuario']) || empty($_POST['clave']) || empty($_POST['rol'])) {
-        $alert = '<div class="alert alert-primary" role="alert">
+        $alert = '<div class="alert alert-danger" role="alert">
                     Todos los campos son obligatorios
                 </div>';
     } else {

@@ -18,13 +18,15 @@ include "includes/functions.php";
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Sistema De Inventario</title>
+	<title>Sistema De Asignacion De Epp</title>
 
 	
 
 <!-- Estilos personalizados para esta plantilla-->
 	<link href="css/sb-admin-2.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="css/styles.css">
+	
 
 </head>
 
@@ -52,13 +54,12 @@ include "includes/functions.php";
             <!-- Barra superior -->
 				<nav class="navbar navbar-expand navbar-light bg-primary text-white topbar mb-4 static-top shadow">
 
-					
                     <!-- Alternar barra lateral (barra superior) -->
 					<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
 						<i class="fa fa-bars"></i>
 					</button>
 					<div class="input-group">
-					<h6>Sistema de Inventario </h6>
+					<h6>Sistema De Asignacion De Epp </h6>
 					<p class="ml-auto"><strong>Colombia, </strong><?php echo fechaColombia(); ?></p>
 					</div>
 					

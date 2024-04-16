@@ -1,9 +1,12 @@
 <?php 
 include_once "includes/header.php";
 include "../conexion.php";
+
+$modificado = false; // Variable para verificar si se ha realizado alguna modificación
+
 if (!empty($_POST)) {
   $alert = "";
-  if (empty($_POST['cedula']) || empty($_POST['nombres']) || empty($_POST['apellidos']) || empty($_POST['proceso'])) {
+  if (empty($_POST['cedula']) OR empty($_POST['nombres']) OR empty($_POST['apellidos']) OR empty($_POST['proceso']) OR empty($_POST['correo'])) {
     $alert = '<div class="alert alert-danger" role="alert">
     Todos los campos son obligatorios </div>';
   } else {
@@ -12,41 +15,27 @@ if (!empty($_POST)) {
     $nombres = $_POST['nombres'];
     $apellidos = $_POST['apellidos'];
     $proceso = $_POST['proceso'];
+    $correo = $_POST['correo'];
 
-    $result = 0;
-    if (is_numeric($cedula) and $cedula != 0) {
+    // Realizar actualización
+    $sql_update = mysqli_query($conexion, "UPDATE empleados SET cedula = '$cedula', nombres = '$nombres' , apellidos = '$apellidos', proceso = '$proceso', correo = '$correo'  WHERE id_empleado = $id_empleado");
 
-      $query = mysqli_query($conexion, "SELECT * FROM empleados where (cedula = '$cedula' AND id_empleado != $id_empleado)");
-      $result = mysqli_fetch_array($query);
-      $resul = mysqli_num_rows($query);
-    }
-
-    if ($resul >= 1) {
-      $alert = '<div class="alert alert-danger" role="alert">
-      La cedula ya existe </div>';
+    if ($sql_update) {
+      $alert = '<div class="alert alert-success" role="alert">
+      Empleado Actualizado correctamente </div>';
+      $modificado = true; // Indicar que se ha realizado una modificación
     } else {
-      if ($cedula == '') {
-        $cedula = 0;
-      }
-      $sql_update = mysqli_query($conexion, "UPDATE empleados SET cedula = '$cedula', nombres = '$nombres' , apellidos = '$apellidos', proceso = '$proceso' WHERE id_empleado = $id_empleado");
-
-      if ($sql_update) {
-        $alert = '<div class="alert alert-success" role="alert">
-        Empleado Actualizado correctamente </div>';
-      } else {
-        $alert = '<div class="alert alert-danger" role="alert">
-        Error al Actualizar el Empleado</div>';
-      }
+      $alert = '<div class="alert alert-danger" role="alert">
+      Error al Actualizar el Empleado</div>';
     }
   }
 }
-// Mostrar Datos
 
+// Mostrar Datos
 $id_empleado = $_REQUEST['id_empleado'];
 $sql = mysqli_query($conexion, "SELECT * FROM empleados WHERE id_empleado = $id_empleado");
 $result_sql = mysqli_num_rows($sql);
 if ($result_sql == 0) {
-
 } else {
   while ($data = mysqli_fetch_array($sql)) {
     $id_empleado = $data['id_empleado'];
@@ -54,9 +43,11 @@ if ($result_sql == 0) {
     $nombres = $data['nombres'];
     $apellidos = $data['apellidos'];
     $proceso = $data['proceso'];
+    $correo = $data['correo'];
   }
 }
 ?>
+
 
 <!----------------------------------------- VISTA PARA EDITAR EMPLEADO---------------------------------------->
 <div class="container-fluid">
@@ -72,7 +63,7 @@ if ($result_sql == 0) {
          Editar Empleado
         </div>
         <div class="card-body">
-        <form action="" method="post">
+        <form id="miformulario" action="" method="post">
           <?php echo isset($alert) ? $alert : ''; ?>
           
           <input type="hidden" name="id_empleado" value="<?php echo $id_empleado; ?>">
@@ -92,6 +83,14 @@ if ($result_sql == 0) {
             <label for="proceso">Proceso</label>
             <input type="text" placeholder="Ingrese Proceso" name="proceso" class="form-control" id="proceso" value="<?php echo $proceso; ?>">
           </div>
+
+          <div class="form-group">
+            <label for="correo">Correo</label>
+            <input type="text" placeholder="Ingrese Proceso" name="correo" class="form-control" id="correo" value="<?php echo $correo; ?>">
+          </div>
+
+         
+          <!-- <button type="submit" id="botonEditar" class="btn btn-primary" // <?php if (!$modificado) echo 'disabled'; ?>//>Editar</button> -->
           <button type="submit" class="btn btn-primary"><i class="fas fa-user-edit"></i> Editar Empleado</button>
         </form>
       </div>
@@ -99,5 +98,10 @@ if ($result_sql == 0) {
   </div>
 </div>
 <!-- /.container-fluid -->
+
+
+  
+
+
 
 <?php include_once "includes/footer.php"; ?>

@@ -15,9 +15,10 @@
 				<table class="table table-striped table-bordered" id="table">
 					<thead class="thead-dark">
 						<tr>
-							<th>ID</th>
+							<th>COD.PRODUCTO</th>
 							<th>DESCRIPCION</th>
 							<th>STOCK</th>
+							<th>TALLA</th>
 							<?php if ($_SESSION['rol'] == 1) { ?>
 							<th>ACCIONES</th>
 							<?php } ?>
@@ -36,6 +37,7 @@
 									<td><?php echo $data['codproducto']; ?></td>
 									<td><?php echo $data['descripcion']; ?></td>
 									<td><?php echo $data['cantidad']; ?></td>
+									<td><?php echo $data['talla']; ?></td>
 										<?php if ($_SESSION['rol'] == 1) { ?>
 									<td>
 										<a href="agregar_producto.php?codproducto=<?php echo $data['codproducto']; ?>" class="btn btn-primary"><i class='fas fa-audio-description'></i></a>

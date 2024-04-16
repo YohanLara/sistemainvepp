@@ -79,7 +79,7 @@
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Asignaciones</div>
-							<div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $data ['count_asignaciones'];?></div>
 						</div>
 						<div class="col-auto">
 							<i class=""></i>
@@ -119,6 +119,8 @@
         </div>
     </div>
 
+
+	<?php if ($_SESSION['rol'] == 1) { ?>
     <div class="col-lg-6">
         <div class="card">
     
@@ -147,7 +149,7 @@
 	</div>
 		</div>
 		
-
+		<?php } ?>
 
 </div>
 

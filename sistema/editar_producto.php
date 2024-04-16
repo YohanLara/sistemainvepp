@@ -7,7 +7,7 @@ if (!empty($_POST)) {
   $alert = "";
   // Verificar si el campo de descripción está vacío
   if (empty($_POST['descripcion'])) {
-    $alert = '<div class="alert alert-primary" role="alert">
+    $alert = '<div class="alert alert-danger" role="alert">
                La descripción es obligatoria
               </div>';
   } else {
@@ -15,8 +15,9 @@ if (!empty($_POST)) {
     $codproducto = $_GET['codproducto'];
     // Obtener los datos del formulario
     $descripcion = $_POST['descripcion'];
+    $talla = $_POST['talla'];
     // Ejecutar la consulta de actualización
-    $query_update = mysqli_query($conexion, "UPDATE producto SET descripcion = '$descripcion' WHERE codproducto = $codproducto");
+    $query_update = mysqli_query($conexion, "UPDATE producto SET descripcion = '$descripcion', talla = '$talla' WHERE codproducto = $codproducto");
     if ($query_update) {
       $alert = '<div class="alert alert-success" role="alert">
                 Producto actualizado correctamente
@@ -60,6 +61,14 @@ mysqli_close($conexion);
               <label for="descripcion">Descripción del producto</label>
               <input type="text" class="form-control" placeholder="Ingrese descripción del producto" name="descripcion" id="descripcion" value="<?php echo $data['descripcion']; ?>">
             </div>
+
+
+            <div class="form-group">
+              <label for="talla">Talla</label>
+              <input type="text" class="form-control" placeholder="Ingrese descripción del producto" name="talla" id="talla" value="<?php echo $data['talla']; ?>">
+            </div>
+
+
             <input type="submit" value="Actualizar Producto" class="btn btn-primary">
           </form>
         </div>

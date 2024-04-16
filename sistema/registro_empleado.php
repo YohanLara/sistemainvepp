@@ -9,7 +9,7 @@ if (!empty($_POST)) {
     // Aquí se valida si alguno de los campos del formulario está vacío. 
     // Si alguno de estos campos está vacío, se asigna un mensaje de alerta a la variable $alert indicando que todos los campos son obligatorios.
     
-    if (empty($_POST['cedula']) || empty($_POST['nombres']) ||  empty($_POST['apellidos']) || empty($_POST['proceso'])) {
+    if (empty($_POST['cedula']) || empty($_POST['nombres']) ||  empty($_POST['apellidos']) || empty($_POST['proceso'])  || empty($_POST['correo'])) {
         $alert = '<div class="alert alert-danger" role="alert">
                                     Todos los campos son obligatorios
                                </div>';
@@ -25,6 +25,7 @@ if (!empty($_POST)) {
         $nombres = $_POST['nombres'];
         $apellidos = $_POST['apellidos'];
         $proceso = $_POST['proceso'];
+        $correo = $_POST['correo'];
         $usuario_id = $_SESSION['idUser'];
         
         //$result = 0;: Se inicializa la variable $result con el valor 0. 
@@ -40,8 +41,8 @@ if (!empty($_POST)) {
                                     La cedula ya existe
                                 </div>';
         } else {
-            $query_insert = mysqli_query($conexion, "INSERT INTO empleados(cedula,nombres,apellidos,proceso, usuario_id) values ($cedula, '$nombres', '$apellidos', '$proceso', '$usuario_id')");
-            if ($query_insert) {
+            $query_insert = mysqli_query($conexion, "INSERT INTO empleados(cedula,nombres,apellidos,proceso, correo, usuario_id) values ($cedula, '$nombres', '$apellidos', '$proceso', '$correo', '$usuario_id')");
+            if ($query_insert) { // si la consulta es exitosa se ejecuta todo lo que esta dentro del bloque
                 $alert = '<div class="alert alert-success" role="alert">
                                     Cliente Registrado
                                 </div>';
@@ -89,6 +90,10 @@ if (!empty($_POST)) {
                 <div class="form-group">
                     <label for="proceso">Proceso</label>
                     <input type="text" placeholder="Ingrese Proceso" name="proceso" id="proceso" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo</label>
+                    <input type="text" placeholder="Ingrese Correo" name="correo" id="correo" class="form-control">
                 </div>
                 <input type="submit" value="Guardar" class="btn btn-success">
             </form>

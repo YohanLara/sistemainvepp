@@ -1,176 +1,42 @@
-$(document).ready(function(){
-  $('.btnMenu').click(function(e) {
-    e.preventDefault();
-    if($('nav').hasClass('viewMenu')) {
-      $('nav').removeClass('viewMenu');
-    }else {
-      $('nav').addClass('viewMenu');
-    }
-  });
 
-  $('nav ul li').click(function() {
-    $('nav ul li ul').slideUp();
-    $(this).children('ul').slideToggle();
-  });
-// Modal Agregar
-    $('.add_product').click(function(e) {
+//-----------------------------------ACTIVA CAMPOS PARA REGISTRAR EMPLEADO------------------------------------
+
+  $('.btn_new_empleado').click(function(e) {
       e.preventDefault();
-      var producto = $(this).attr('product');
-      var action = 'infoProducto';
-      $.ajax({
-        url: 'modal.php',
-        type: 'POST',
-        async: true,
-        data: {action:action,producto:producto},
+      // Habilitar los campos
+      $('#cedula_empleado').removeAttr('disabled');
+      $('#nom_empleado').removeAttr('disabled');
+      $('#ape_empleado').removeAttr('disabled');
+      $('#pro_empleado').removeAttr('disabled');
+      $('#cor_empleado').removeAttr('disabled');
+      // Ocultar el botón "Nuevo Empleado"
 
-        success: function(response) {
-        if (response != 0) {
-          var info = JSON.parse(response);
-        //  $('#producto_id').val(info.codproducto);
-        //  $('.nameProducto').html(info.descripcion);
-
-          $('.bodyModal').html('<form action="" method="post" name="form_add_product" id="form_add_product" onsubmit="event.preventDefault(); sendDataProduct();">'+
-            '<h1>Agregar Producto</h1><br>'+
-            '<h2 class="nameProducto">'+info.descripcion+'</h2>'+
-            '<br>'+
-            '<hr>'+
-            '<input type="number" name="cantidad" id="txtCantidad" placeholder="Cantidad del Producto" required><br>'+
-            '<input type="number" name="precio" id="txtPrecio" placeholder="Precio del Producto" required>'+
-            '<input type="hidden" name="producto_id" id="producto_id" value="'+info.codproducto+'" required><br>'+
-            '<input type="hidden" name="action" value="addProduct" required>'+
-            '<div class="alert alertAddProduct"></div>'+
-            '<button type="submit" class="btn_new">Agregar</button>'+
-            '<a href="#" class="btn_ok closeModal" onclick="closeModal();">Cerrar</a>'+
-
-          '</form>');
-        }
-        },
-        error: function(error) {
-          console.log(error);
-        }
-        });
-
-      $('.modal').fadeIn();
-
-    });
-// modal Eliminar producto
-$('.del_product').click(function(e) {
-  e.preventDefault();
-  var producto = $(this).attr('product');
-  var action = 'infoProducto';
-  $.ajax({
-    url: 'modal.php',
-    type: 'POST',
-    async: true,
-    data: {action:action,producto:producto},
-
-    success: function(response) {
-    if (response != 0) {
-      var info = JSON.parse(response);
-    //  $('#producto_id').val(info.codproducto);
-    //  $('.nameProducto').html(info.descripcion);
-
-      $('.bodyModal').html('<form action="" method="post" name="form_del_product" id="form_del_product" onsubmit="event.preventDefault(); delProduct();">'+
-        '<h2 style="color: red; font-size: 18px;">¿Estás seguro de eliminar el Producto</h2>'+
-        '<h2 class="nameProducto">'+info.descripcion+'</h2>'+
-        '<hr>'+
-        '<input type="hidden" name="producto_id" id="producto_id" value="'+info.codproducto+'" required><br>'+
-        '<input type="hidden" name="action" value="delProduct" required>'+
-        '<div class="alert alertAddProduct"></div>'+
-        '<input type="submit"  value="Aceptar" class="ok"><br>'+
-        '<a href="#" style="text-align: center;" class="btn_cancelar" onclick="closeModal();">Cerrar</a>'+
-      '</form>');
-    }
-    },
-    error: function(error) {
-      console.log('error');
-    }
-    });
-
-  $('.modal').fadeIn();
-
-});
-
-$('#search_proveedor').change(function(e) {
-  e.preventDefault();
-  var sistema = getUrl();
-  location.href = sistema+'buscar_productos.php?proveedor='+$(this).val();
-
-});
-
-// activa campos para registrar Cliente
-$('.btn_new_cliente').click(function(e) {
-  e.preventDefault();
-  $('#nom_cliente').removeAttr('disabled');
-  $('#tel_cliente').removeAttr('disabled');
-  $('#dir_cliente').removeAttr('disabled');
-
-  $('#div_registro_cliente').slideDown();
-
-});
-
-// buscar Cliente
-$('#dni_cliente').keyup(function(e) {
-  e.preventDefault();
-  var cl = $(this).val();
-  var action = 'searchCliente';
-  $.ajax({
-    url: 'modal.php',
-    type: "POST",
-    async: true,
-    data: {action:action,cliente:cl},
-    success: function(response) {
-      if (response == 0) {
-        $('#idcliente').val('');
-        $('#nom_cliente').val('');
-        $('#tel_cliente').val('');
-        $('#dir_cliente').val('');
-        // mostar boton agregar
-        $('.btn_new_cliente').slideDown();
-      }else {
-        var data = $.parseJSON(response);
-        $('#idcliente').val(data.idcliente);
-        $('#nom_cliente').val(data.nombre);
-        $('#tel_cliente').val(data.telefono);
-        $('#dir_cliente').val(data.direccion);
-        // ocultar boton Agregar
-        $('.btn_new_cliente').slideUp();
-
-        // Bloque campos
-        $('#nom_cliente').attr('disabled','disabled');
-        $('#tel_cliente').attr('disabled','disabled');
-        $('#dir_cliente').attr('disabled','disabled');
-        // ocultar boto Guardar
-        $('#div_registro_cliente').slideUp();
-      }
-    },
-    error: function(error) {
-
-    }
+      // Mostrar el botón "Guardar"
+      $('#div_registro_empleado').slideDown();
   });
 
-});
-
-// crear cliente = Ventas
-$('#form_new_cliente_venta').submit(function(e) {
+//------------------------------------- CREAR EMPLEADO = ASIG-------------------------------------------------
+$('#form_new_empleado_asig').submit(function(e) {
   e.preventDefault();
   $.ajax({
     url: 'modal.php',
     type: "POST",
     async: true,
-    data: $('#form_new_cliente_venta').serialize(),
+    data: $('#form_new_empleado_asig').serialize(),
     success: function(response) {
       if (response  != 0) {
         // Agregar id a input hidden
-        $('#idcliente').val(response);
+        $('#id_empleado').val(response);
         //bloque campos
-        $('#nom_cliente').attr('disabled','disabled');
-        $('#tel_cliente').attr('disabled','disabled');
-        $('#dir_cliente').attr('disabled','disabled');
+        $('#cedula_empleado').attr('disabled','disabled');
+        $('#nom_empleado').attr('disabled','disabled');
+        $('#ape_empleado').attr('disabled','disabled');
+        $('#pro_empleado').attr('disabled','disabled');
+        $('#cor_empleado').attr('disabled','disabled');
         // ocultar boton Agregar
-        $('.btn_new_cliente').slideUp();
+        $('.btn_new_empleado').slideUp();
         //ocultar boton Guardar
-        $('#div_registro_cliente').slideDown();
+        $('#div_registro_empleado').slideDown();
       }
     },
     error: function(error) {
@@ -178,21 +44,82 @@ $('#form_new_cliente_venta').submit(function(e) {
   });
 });
 
-// buscar producto = Ventas
+// ------------------------------------------BUSCAR EMPLEADO POR CEDULA---------------------------------------
+$('#cedula_empleado').keyup(function(e) {
+  e.preventDefault();
+  var em = $(this).val();
+  var action = 'searchEmpleado';
+  $.ajax({
+    url: 'modal.php',
+    type: "POST",
+    async: true,
+    data: {action:action,empleados:em},
+    success: function(response) {
+      //SI LA RESPUESTA DEVUELVE 0 LOS CAMPOS QUEDAN EN BLANCO Y PERMITIRA MOSTRAR EL BOTON PARA AGREGAR UN NUEVO EMPLEADO
+      if (response == 0) {
+        $('#id_empleado').val('');
+        $('#nom_empleado').val('');
+        $('#ape_empleado').val('');
+        $('#pro_empleado').val('');
+        $('#cor_empleado').val('');
+        // mostar boton agregar
+        $('.btn_new_empleado').slideDown();
+      }else {
+        //
+        var data = $.parseJSON(response);
+        $('#id_empleado').val(data.id_empleado);
+        $('#nom_empleado').val(data.nombres);
+        $('#ape_empleado').val(data.apellidos);
+        $('#pro_empleado').val(data.proceso);
+        $('#cor_empleado').val(data.correo);
+        // ocultar boton Agregar
+        $('.btn_new_empleado').slideUp();
+
+        // BLOQUEA LOS SIGUIENTES CAMPOS 
+        $('#nom_cliente').attr('disabled','disabled');
+        $('#ape_empleado').attr('disabled','disabled');
+        $('#pro_empleado').attr('disabled','disabled');
+        $('#cor_empleado').attr('disabled','disabled');
+        // ocultar boto Guardar
+        $('#div_registro_empleado').slideUp();
+      }
+    },
+    error: function(error) {
+
+    }
+  });
+
+});
+// -----------------------------ALERTAS DE ELIMINAR DE TODOS LOS MODULOS OK?------------------------------------
+$(".confirmar").submit(function(e) {
+  e.preventDefault();
+  Swal.fire({
+    title: 'Esta seguro de eliminar?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'SI, Eliminar!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.submit();
+    }
+  })
+});
+// ------------------------------------------BUSCAR PRODUCTO = ASIGNACION-------------------------------------
+
 $('#txt_cod_producto').keyup(function(e) {
   e.preventDefault();
   var productos = $(this).val();
   if (productos == "") {
     $('#txt_descripcion').html('-');
-    $('#txt_existencia').html('-');
+    $('#txt_cantidad').html('-');
     $('#txt_cant_producto').val('0');
-    $('#txt_precio').html('0.00');
-    $('#txt_precio_total').html('0.00');
 
     //Bloquear Cantidad
     $('#txt_cant_producto').attr('disabled', 'disabled');
     // Ocultar Boto Agregar
-    $('#add_product_venta').slideUp();
+    $('#add_product_asig').slideUp();
   }
   var action = 'infoProducto';
   if (productos != '') {
@@ -200,33 +127,33 @@ $('#txt_cod_producto').keyup(function(e) {
     url: 'modal.php',
     type: "POST",
     async: true,
-    data: {action:action,producto:productos},
+    data: {action:action,productos:productos},
     success: function(response){
       if(response == 0) {
         $('#txt_descripcion').html('-');
-        $('#txt_existencia').html('-');
+        $('#txt_talla').html('-');
+        $('#txt_cantidad').html('-');
         $('#txt_cant_producto').val('0');
-        $('#txt_precio').html('0.00');
-        $('#txt_precio_total').html('0.00');
+   
 
         //Bloquear Cantidad
         $('#txt_cant_producto').attr('disabled','disabled');
         // Ocultar Boto Agregar
-        $('#add_product_venta').slideUp();
+        $('#add_product_asig').slideUp();
 
 
       }else{
 
         var info = JSON.parse(response);
         $('#txt_descripcion').html(info.descripcion);
-        $('#txt_existencia').html(info.existencia);
-        $('#txt_cant_producto').val('1');
-        $('#txt_precio').html(info.precio);
-        $('#txt_precio_total').html(info.precio);
+        $('#txt_talla').html(info.talla);
+        $('#txt_cantidad').html(info.cantidad);
+        $('#txt_cant_producto').val('');
+
         // Activar Cantidad
         $('#txt_cant_producto').removeAttr('disabled');
         // Mostar boton Agregar
-        $('#add_product_venta').slideDown();
+        $('#add_product_asig').slideDown();
 
       }
     },
@@ -234,35 +161,22 @@ $('#txt_cod_producto').keyup(function(e) {
     }
   });
   $('#txt_descripcion').html('-');
-  $('#txt_existencia').html('-');
+  $('#txt_talla').html('-');  
+  $('#txt_cantidad').html('-');
   $('#txt_cant_producto').val('0');
-  $('#txt_precio').html('0.00');
-  $('#txt_precio_total').html('0.00');
+
 
   //Bloquear Cantidad
   $('#txt_cant_producto').attr('disabled','disabled');
   // Ocultar Boto Agregar
-  $('#add_product_venta').slideUp();
+  $('#add_product_asig').slideUp();
 
   }
 });
+// -----------------------------------------AGREGAR PRODUCTO AL DETALLE ---------------------------------------
 
-// calcular el Total
-$('#txt_cant_producto').keyup(function(e) {
-  e.preventDefault();
-  var precio_total = $(this).val() * $('#txt_precio').html();
-  var existencia = parseInt($('#txt_existencia').html());
-  $('#txt_precio_total').html(precio_total);
-  // Ocultat el boton Agregar si la cantidad es menor que 1
-  if (($(this).val() < 1 || isNaN($(this).val())) || ($(this).val() > existencia)){
-    $('#add_product_venta').slideUp();
-  }else {
-    $('#add_product_venta').slideDown();
-  }
-});
-
-// Agregar producto al detalle_venta
-$('#add_product_venta').click(function(e) {
+//Agregar producto al detalle_asig
+$('#add_product_asig').click(function(e) {
   e.preventDefault();
   if ($('#txt_cant_producto').val() > 0) {
     var codproducto = $('#txt_cod_producto').val();
@@ -273,42 +187,60 @@ $('#add_product_venta').click(function(e) {
       type: 'POST',
       async: true,
       data: {action:action,producto:codproducto,cantidad:cantidad},
-      success: function(response) {
-        
-        if (response != 'error') {
-          var info = JSON.parse(response);
-          $('#detalle_venta').html(info.detalle);
-          $('#detalle_totales').html(info.totales);
-          $('#txt_cod_producto').val('');
-          $('#txt_descripcion').html('-');
-          $('#txt_existencia').html('-');
-          $('#txt_cant_producto').val('0');
-          $('#txt_precio').html('0.00');
-          $('#txt_precio_total').html('0.00');
 
-          // Bloquear cantidad
-          $('#txt_cant_producto').attr('disabled','disabled');
+      success: function(response)
+      {
+        if (response !== 'error') 
+        {
+           var info = JSON.parse(response);
+           $('#detalle_asig').html(info.detalle);
+           
 
-          // Ocultar boton agregar
-          $('#add_product_venta').slideUp();
-        }else {
-          console.log('No hay dato');
-        }
+
+           $('#txt_cod_producto').val('');
+           $('#txt_descripcion').html('-');
+           $('#txt_talla').html('-');
+           $('#txt_cantidad').html('-');
+           $('#txt_cant_producto').val('0');
+
+           //bloquear cantidad
+           $('#txt_cant_producto').attr('disabled','disabled');
+
+
+           //ocultar boton agregar 
+           $('#add_product_asig').slideUp();
+
+        }else
+        console.log ('no encontro ningun dato');
+          
         viewProcesar();
       },
-      error: function(error) {
+      error: function(error){
 
       }
     });
   }
 });
-
-// anular venta
-$('#btn_anular_venta').click(function(e) {
+// ---------------------NOS PERMITE AGREGAR MAS CANTIDAD DE LA QUE HAY ACTUALMENTE-----------------------------
+$('#txt_cant_producto').keyup(function(e) {
   e.preventDefault();
-  var rows = $('#detalle_venta tr').length;
+
+  var cantidad = parseInt($('#txt_cantidad').html());
+
+  // Ocultat el boton Agregar si la cantidad es menor que 1
+  if (($(this).val() < 1 || isNaN($(this).val())) || ($(this).val() > cantidad)){
+    $('#add_product_asig').slideUp();
+  }else {
+    $('#add_product_asig').slideDown();
+  }
+});
+
+// ------------------------------------------ANULAR ASIG----------------------------------------------------
+$('#btn_anular_asig').click(function(e) {
+  e.preventDefault();
+  var rows = $('#detalle_asig tr').length;
   if (rows > 0) {
-    var action = 'anularVenta';
+    var action = 'anularAsig';
     $.ajax({
       url: 'modal.php',
       type: 'POST',
@@ -325,27 +257,108 @@ $('#btn_anular_venta').click(function(e) {
     });
   }
 });
-// facturar venta
-$('#btn_facturar_venta').click(function(e) {
+// -------------------------------ABRE VENTANA MODAL DE LISTA DE PRODUCTOS------------------------------------
+function openIndexPage() {
+  // Abre la página index en una ventana pequeña, se puede ajustar el tamaño segun sus necesidades
+  window.open('lista_productos.php', 'IndexPage', 'width=600,height=500,scrollbars=yes');
+  }
+  // ---------------------------ABRE VENTANA MODAL DE LISTA DE EMPLEADOS--------------------------------------
+  function openIndexPag() {
+    // Abre la página index en una ventana pequeña, se puede ajustar el tamaño segun sus necesidades
+    window.open('lista_empleado.php', 'IndexPage', 'width=600,height=500,scrollbars=yes');
+    }
+
+  // ---------------------------ABRE VENTANA MODAL DE LISTA DE Productos DE LA TABLA DETALLE DE ENTRADA--------------------------------------
+  function openIndexPag3() {
+    // Abre la página index en una ventana pequeña, se puede ajustar el tamaño segun sus necesidades
+    window.open('lista_productos.php', 'IndexPage', 'width=600,height=500,scrollbars=yes');
+    }
+    
+  
+// *-----------------------------------------ELIMINAR DETALLES DE ASIGNACION------------------------------------------------
+    
+function del_product_detalle(correlativo) {
+  var action = 'delProductoDetalle';
+  var id_detalle = correlativo;
+  $.ajax({  
+    url: 'modal.php',
+    type: "POST",
+    async: true,
+    data: {action:action,id_detalle:id_detalle},
+    success: function(response) {
+        if (response != 0) {
+          
+        var info = JSON.parse(response);
+
+        $('#detalle_asig').html(info.detalle);
+           
+
+        $('#txt_cod_producto').val('');
+        $('#txt_descripcion').html('-');
+        $('#txt_talla').html('-');
+        $('#txt_cantidad').html('-');
+        $('#txt_cant_producto').val('0');
+
+        // Bloquear cantidad
+        $('#txt_cant_producto').attr('disabled','disabled');
+
+        // Ocultar boton agregar
+        $('#add_product_asig').slideUp();
+        
+      }else {
+        $('#detalle_asig').html('');
+     
+      }
+
+      viewProcesar();
+ 
+    },
+    error: function(error) {
+      
+    }
+  });
+}
+
+// mostrar/ ocultar boton Procesar
+function viewProcesar() {
+  if ($('#detalle_asig tr').length > 0){
+    $('#btn_asig').show();
+    $('#btn_anular_asig').show();
+  }else {
+    $('#btn_asig').hide();
+    $('#btn_anular_asig').hide();
+  }
+}
+// --------------------------------------------REALIZAR ASIGNACION------------------------------------------------
+$('#btn_asig').click(function(e) {
   e.preventDefault();
-  var rows = $('#detalle_venta tr').length;
-  if (rows > 0) {
-    var action = 'procesarVenta';
-    var codcliente = $('#idcliente').val();
+
+  var rows = $('#detalle_asig tr').length;
+  if (rows > 0) 
+  {
+
+    var action = 'procesarAsig';
+    var codemp = $('#id_empleado').val();
+
     $.ajax({
       url: 'modal.php',
       type: 'POST',
       async: true,
-      data: {action:action,codcliente:codcliente},
-      success: function(response) {
-      if (response != 0) {
-        var info = JSON.parse(response);
-        //console.log(info);
-        generarPDF(info.codcliente,info.nofactura);
-        location.reload();
-      }else {
-        console.log('no hay dato');
-      }
+      data: {action:action,codemp:codemp},
+      success: function(response)
+      {
+        if (response != 'error')
+        {
+          var info = JSON.parse(response);
+          console.log(info);
+
+          generarPDF(info.codemple,info.noasig);
+          location.reload();
+
+        }else{
+          console.log('No hay datos');
+        } 
+      //  console.log(response);
       },
       error: function(error) {
 
@@ -354,16 +367,21 @@ $('#btn_facturar_venta').click(function(e) {
   }
 });
 
-//Ver Factura
-$('.view_factura').click(function(e) {
+//---------------------------------------------- GENERA EL PDF-----------------------------------------
+function generarPDF(cliente,asignacion) {
+  url = 'fpdf/pruebav.php?codemp='+cliente+'&a='+asignacion;
+  window.open(url, '_blank');
+}
+$('.view_asig').click(function(e) {
   e.preventDefault();
 
-  var codCliente = $(this).attr('cl');
-  var noFactura = $(this).attr('f');
+  var codEmple = $(this).attr('codemp');
+  var noasig = $(this).attr('a');
 
-  generarPDF(codCliente,noFactura);
+  generarPDF(codEmple,noasig);
 });
-// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+// ------------------------------------------CAMBIAR CONTRASEÑA----------------------------------------------
 // Cambiar contraseña
 $('.newPass').keyup(function() {
   validaPass();
@@ -381,7 +399,7 @@ $('#frmChangePass').submit(function(e){
     $('.alertChangePass').slideDown();
     return false;
     }
-  if (passNuevo.length < 3) {
+  if (passNuevo.length < 5) {
   $('.alertChangePass').html('<p style="color:orangered;">Las contraseñas deben contener como mínimo 5 caracteres');
   $('.alertChangePass').slideDown();
   return false;
@@ -403,187 +421,11 @@ $('#frmChangePass').submit(function(e){
         $('.alertChangePass').slideDown();
       }
     },
-  
+    error: function(error) {
+    }
   });
 });
-// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-$(".confirmar").submit(function(e) {
-  e.preventDefault();
-  Swal.fire({
-    title: 'Esta seguro de eliminar?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'SI, Eliminar!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.submit();
-    }
-  })
-})
 
 
-}); // fin ready
+// ALERTAS DE INICIO DE SESION
 
-function validaPass() {
-  var passNuevo = $('#nueva').val();
-  var confirmarPass = $('#confirmar').val();
-  if (passNuevo != confirmarPass) {
-    $('.alertChangePass').html('<p style="color:red;">Las contraseñas no Coinciden</p>');
-    $('.alertChangePass').slideDown();
-    return false;
-  }
-if (passNuevo.length < 5) {
-  $('.alertChangePass').html('<p style="color:orangered;">Las contraseñas deben contener como mínimo 5 caracteres');
-  $('.alertChangePass').slideDown();
-  return false;
-}
-
-$('.alertChangePass').html('<p style="color:blue;">Las contraseñas Coinciden.</p>');
-$('.alertChangePass').slideDown();
-}
-function generarPDF(cliente,factura) {
-  url = 'factura/generaFactura.php?cl='+cliente+'&f='+factura;
-  window.open(url, '_blank');
-}
-function del_product_detalle(correlativo) {
-  var action = 'delProductoDetalle';
-  var id_detalle = correlativo;
-  $.ajax({
-    url: 'modal.php',
-    type: "POST",
-    async: true,
-    data: {action:action,id_detalle:id_detalle},
-    success: function(response) {
-        if (response != 0) {
-        var info = JSON.parse(response);
-        $('#detalle_venta').html(info.detalle);
-        $('#detalle_totales').html(info.totales);
-        $('#txt_cod_producto').val('');
-        $('#txt_descripcion').html('-');
-        $('#txt_existencia').html('-');
-        $('#txt_cant_producto').val('0');
-        $('#txt_precio').html('0.00');
-        $('#txt_precio_total').html('0.00');
-
-        // Bloquear cantidad
-        $('#txt_cant_producto').attr('disabled','disabled');
-
-        // Ocultar boton agregar
-        $('#add_product_venta').slideUp();
-      }else {
-        $('#detalle_venta').html('');
-        $('#detalle_totales').html('');
-
-
-      }
-      viewProcesar();
-    },
-    error: function(error) {
-      
-    }
-  });
-}
-
-// mostrar/ ocultar boton Procesar
-function viewProcesar() {
-  if ($('#detalle_venta tr').length > 0){
-    $('#btn_facturar_venta').show();
-    $('#btn_anular_venta').show();
-  }else {
-    $('#btn_facturar_venta').hide();
-    $('#btn_anular_venta').hide();
-  }
-}
-
-function searchForDetalle(id) {
-  var action = 'searchForDetalle';
-  var user = id;
-  $.ajax({
-    url: 'modal.php',
-    type: "POST",
-    async: true,
-    data: {action:action,user:user},
-    success: function(response) {
-      if (response == 0) {
-        console.log('');
-      }else {
-        var info = JSON.parse(response);
-        $('#detalle_venta').html(info.detalle);
-        $('#detalle_totales').html(info.totales);
-      }
-      viewProcesar();
-    },
-    error: function(error) {
-
-    }
-  });
-}
-
-function getUrl() {
-  var loc = window.location;
-  var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/')+ 1);
-  return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
-}
-// funcion para agregar producto
-function sendDataProduct() {
-  $('.alertAddProduct').html('');
-  $.ajax({
-    url: 'modal.php',
-    type: 'POST',
-    async: true,
-    data: $('#form_add_product').serialize(),
-    success: function(response) {
-      if (producto == 'error') {
-        $('.alertAddProduct').html('<p style="color : red;">Error al agregar producto.</p>');
-
-      }else {
-        var info = JSON.parse(response);
-        $('.row'+info.producto_id+' .celExistencia').html(info.nueva_existencia);
-        // $('.row'+info.producto_id+' .celPrecio').html(info.nuevo_precio);
-        $('#txtCantidad').val('');
-        // $('#txtPrecio').val('');
-        $('.alertAddProduct').html('<p>Producto Agregado Corectamente.</p>');
-
-      }
-    },
-    error: function(error) {
-      console.log(error);
-
-    }
-  });
-
-}
-
-
-
-// funcion para elimar producto
-function delProduct() {
-  var pr = $('#producto_id').val();
-  $('.alertAddProduct').html('');
-  $.ajax({
-    url: 'modal.php',
-    type: 'POST',
-    async: true,
-    data: $('#form_del_product').serialize(),
-    success: function(response) {
-
-      if (response == 'error') {
-        $('.alertAddProduct').html('<p style="color : red;">Error al eliminar producto.</p>');
-
-      }else {
-
-        $('.row'+pr).remove();
-        $('#form_del_product .ok').remove();
-        $('.alertAddProduct').html('<p>Producto Eliminado Corectamente.</p>');
-
-      }
-    },
-    error: function(error) {
-      console.log(error);
-
-    }
-  });
-
-}

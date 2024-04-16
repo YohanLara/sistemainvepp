@@ -4,10 +4,8 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
---
--- Base de datos: `sisinv`
---
-
+-- Create database if not exists sisinv;
+-------------------------------------------------TABLA ROL---------------------------------------------------
 CREATE TABLE `rol` (
   `idrol` int(11) NOT NULL,
   `rol` varchar(50) COLLATE utf8_spanish_ci NOT NULL
@@ -19,8 +17,7 @@ ALTER TABLE `rol`
 ALTER TABLE `rol`
   MODIFY `idrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
-
-
+------------------------------------------------TABLA USUARIO------------------------------------------------
   CREATE TABLE `usuario` (
   `idusuario` int(11) NOT NULL,
   `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
@@ -41,41 +38,8 @@ ALTER TABLE `usuario`
 
   ALTER TABLE `usuario`
   MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
- ---*-*-*-*-*-*-**-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* 
-DELIMITER $$
-CREATE PROCEDURE `actualizar_cantidad_producto` (IN n_cantidad INT, IN codigo INT)  
-BEGIN
-    DECLARE nueva_cantidad INT;
-
-    SELECT cantidad INTO nueva_cantidad FROM producto WHERE codproducto = codigo;
-
-    SET nueva_cantidad = nueva_cantidad + n_cantidad;
-
-    UPDATE producto SET cantidad = nueva_cantidad WHERE codproducto = codigo;
-
-    SELECT nueva_cantidad;
-END$$
-DELIMITER ;
-
-
-
-
-CREATE PROCEDURE `data` ()
-BEGIN
-  DECLARE count_usuario INT;
-  DECLARE count_empleados INT;
-  DECLARE count_productos INT;
-  
-  SELECT COUNT(*) INTO count_usuario FROM usuario;
-  SELECT COUNT(*) INTO count_empleados FROM empleados;
-   SELECT COUNT(*) INTO count_productos FROM producto;
-
-  SELECT count_usuario, count_empleados ;
-END$$
-DELIMITER ;
--- -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-
+ 
+-------------------------------------------TABLA EMPLEADOS------------------------------------------------
 CREATE TABLE `empleados` (
   `id_empleado` int(11) NOT NULL,
   `cedula` int(12) NOT NULL,
@@ -85,13 +49,8 @@ CREATE TABLE `empleados` (
   `usuario_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
---
--- Volcado de datos para la tabla `cliente`||
---
-
 INSERT INTO `empleados` (`id_empleado`, `cedula`, `nombres`, `apellidos`, `proceso`, `usuario_id`) VALUES
 (1, 1031175234, 'kevin','lara', 'projects', 1);
-
 
 ALTER TABLE `empleados`
   ADD PRIMARY KEY (`id_empleado`);
@@ -99,28 +58,25 @@ ALTER TABLE `empleados`
 ALTER TABLE `empleados`
   MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
+ALTER TABLE empleados
+ADD COLUMN correo varchar(100);
 
+--------------------------------------------- TABLA PRODUCTO------------------------------------------------
 
-
-
-  CREATE TABLE `producto` (
-  `codproducto` int(11) NOT NULL,
+CREATE TABLE `producto` (
+  `codproducto` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `descripcion` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `cantidad` int(11) NOT NULL,
   `talla` varchar(2) NULL,
   `usuario_id` int(11) NOT NULL
-
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-
-
 INSERT INTO `producto` (`codproducto`, `descripcion`, `cantidad`, `talla`, `usuario_id`) VALUES
-(1, 'Tapabocas', 1, '', 1),
-(2, 'Gafas de seguridad', 1, '', 1),
-(3, 'Botas', 1, '39', 1),
-(4, 'Overol', 3, '38', 1),
-(5, 'Guantes', 3, '8', 1);
-
+(1, 'Tapabocas', 10, 'M', 1),
+(2, 'Guantes de látex', 20, 'L', 2),
+(3, 'Gafas de seguridad', 15, 'XL', 1),
+(4, 'Botas de trabajo', 8, '40', 3),
+(5, 'Casco de protección', 12, NULL, 2);
 
 ALTER TABLE `producto`
   ADD PRIMARY KEY (`codproducto`);
@@ -128,70 +84,10 @@ ALTER TABLE `producto`
 ALTER TABLE `producto`
   MODIFY `codproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
----*-*-*-**-**-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/-*-*-*-*-*-*-*-*-*-*-*-*-*--*+-*-*/-*-*-*-*-*-*-*-*-*-*-**
+ALTER TABLE `producto`
+ADD COLUMN `cod` INT UNIQUE;
 
-CREATE PROCEDURE `procesar_asignacion` (IN `cod_usuario` INT, IN `cod_cliente` INT, IN `token` VARCHAR(50))  
-BEGIN
-    DECLARE asignacion_id INT;
-    DECLARE registros INT;
-    DECLARE total_productos INT;
-    DECLARE nueva_existencia INT;
-    DECLARE existencia_actual INT;
-
-    DECLARE tmp_cod_producto INT;
-    DECLARE tmp_cant_producto INT;
-    DECLARE a INT;
-    SET a = 1;
-
-    CREATE TEMPORARY TABLE tbl_tmp_tokenuser(
-        id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        cod_prod BIGINT,
-        cant_prod INT
-    );
-
-    SET registros = (SELECT COUNT(*) FROM detalle_temp WHERE token_user = token);
-    IF registros > 0 THEN
-        -- Insertar detalles en la tabla temporal
-        INSERT INTO tbl_tmp_tokenuser(cod_prod, cant_prod) SELECT codproducto, cantidad FROM detalle_temp WHERE token_user = token;
-
-        -- Insertar asignación
-        INSERT INTO asignacion (cod_usuario, cod_cliente, fecha_asignacion) VALUES (cod_usuario, cod_cliente, NOW());
-        SET asignacion_id = LAST_INSERT_ID();
-
-        -- Insertar detalles de la asignación
-        INSERT INTO detalle_asignacion (asignacion_id, cod_producto, cantidad) 
-        SELECT asignacion_id, codproducto, cantidad FROM detalle_temp WHERE token_user = token;
-
-        -- Actualizar existencia de productos
-        WHILE a <= registros DO
-            SELECT cod_prod, cant_prod INTO tmp_cod_producto, tmp_cant_producto FROM tbl_tmp_tokenuser WHERE id = a;
-            SELECT existencia INTO existencia_actual FROM producto WHERE codproducto = tmp_cod_producto;
-            SET nueva_existencia = existencia_actual - tmp_cant_producto;
-            UPDATE producto SET existencia = nueva_existencia WHERE codproducto = tmp_cod_producto;
-            SET a = a + 1;
-        END WHILE;
-
-        -- Calcular total de productos asignados
-        SELECT SUM(cant_prod) INTO total_productos FROM tbl_tmp_tokenuser;
-
-        -- Eliminar detalles temporales
-        DELETE FROM detalle_temp WHERE token_user = token;
-        -- Limpiar tabla temporal
-        TRUNCATE TABLE tbl_tmp_tokenuser;
-
-        -- Mostrar detalles de la asignación
-        SELECT asignacion_id AS 'ID Asignación', total_productos AS 'Cantidad Productos Asignados', NOW() AS 'Fecha Asignación', 
-               p.nombre AS 'Nombre Producto', CONCAT(u.nombre, ' ', u.apellido) AS 'Empleado Asignado'
-        FROM asignacion a
-        INNER JOIN detalle_asignacion da ON a.id_asignacion = da.asignacion_id
-        INNER JOIN producto p ON da.cod_producto = p.codproducto
-        INNER JOIN usuario u ON a.cod_usuario = u.cod_usuario
-        WHERE a.id_asignacion = asignacion_id;
-    ELSE
-        SELECT 0 AS 'Error: No hay productos para asignar';
-    END IF;
-END$$
-
+---------------------------------------------TABLA DE ENTRADAS-----------------------------------------------
 CREATE TABLE `entradas` (
   `correlativo` int(11) NOT NULL,
   `codproducto` int(11) NOT NULL,
@@ -205,3 +101,144 @@ ALTER TABLE `entradas`
   
 ALTER TABLE `entradas`
   MODIFY `correlativo` int(11) NOT NULL AUTO_INCREMENT;
+----------------------------------------------DETALLE TEMPORAL-----------------------------------------------
+CREATE TABLE `detalle_temp` (
+  `correlativo` int(11) NOT NULL,
+  `token_user` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `codproducto` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+
+ALTER TABLE `detalle_temp`
+  ADD PRIMARY KEY (`correlativo`);
+
+  ALTER TABLE `detalle_temp`
+  MODIFY `correlativo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+---------------------------------------------PROCEDIMIENTOS--------------------------------------------------
+--------------------------------------PARA CONTAR EN EL DASHBOARD--------------------------------------------
+CREATE PROCEDURE `data` ()
+BEGIN
+  DECLARE count_usuario INT;
+  DECLARE count_empleados INT;
+  DECLARE count_productos INT;
+  DECLARE count_asignaciones INT;
+  
+  SELECT COUNT(*) INTO count_usuario FROM usuario;
+  SELECT COUNT(*) INTO count_empleados FROM empleados;
+   SELECT COUNT(*) INTO count_productos FROM producto;
+   SELECT COUNT(*) INTO count_asignaciones FROM asignacion;
+
+
+  SELECT count_usuario, count_empleados,count_productos,count_asignaciones ;
+
+END$$
+DELIMITER ;
+
+--------------------------------------- ACTUALIZAR CANTIDADES------------------------------------------------ 
+DELIMITER $$
+
+CREATE PROCEDURE `actualizar_cantidad_producto`(IN `n_cantidad` INT, IN `codigo` INT)  
+BEGIN
+    DECLARE nueva_cantidad INT;
+
+    DECLARE actual_cantidad INT;
+
+    -- Obtener la existencia actual del producto
+    SELECT cantidad INTO actual_cantidad FROM producto WHERE codproducto = codigo;
+
+    -- Calcular la nueva existencia sumando la cantidad proporcionada
+    SET nueva_cantidad = actual_cantidad+ n_cantidad;
+    
+    -- Actualizar la existencia del producto
+    UPDATE producto SET cantidad = nueva_cantidad WHERE codproducto = codigo;
+
+    -- Devolver la nueva existencia
+    SELECT nueva_cantidad;
+END $$
+
+DELIMITER ;
+
+------------------------------------DETALLE TEMPORAL DE LAS ASIGNACIONES--------------------------------------
+-- inserta un nuevo registro en la tabla detalle_temp 
+--y luego selecciona información relacionada de esta tabla junto con información adicional de la tabla producto
+--basada en el token de usuario proporcionado.
+
+DELIMITER $$
+CREATE PROCEDURE add_detalle_temp(codigo INT, cantidad INT, token_user VARCHAR(50))
+BEGIN
+    INSERT INTO detalle_temp(token_user, codproducto, cantidad)
+    VALUES (token_user, codigo, cantidad);
+    
+    SELECT tmp.correlativo, tmp.codproducto, p.descripcion, tmp.cantidad, p.talla
+    FROM detalle_temp tmp
+    INNER JOIN producto p ON tmp.codproducto = p.codproducto
+    WHERE tmp.token_user = token_user;
+END$$
+DELIMITER ;
+
+--------------------------------------PARA ELIMINAR LOS EPP SELECCIONADOS-------------------------------------
+DELIMITER $$
+CREATE PROCEDURE `del_detalle_temp` (`id_detalle` INT, `token` VARCHAR(50))  BEGIN
+DELETE FROM detalle_temp WHERE correlativo = id_detalle;
+SELECT tmp.correlativo, tmp.codproducto, p.descripcion, p.talla, tmp.cantidad FROM detalle_temp tmp INNER JOIN producto p ON tmp.codproducto = p.codproducto WHERE tmp.token_user = token;
+END$$
+
+
+DELIMITER $$
+CREATE PROCEDURE `procesar_asignacion` (IN `cod_usuario` INT, IN `codemple` INT, IN `token` VARCHAR(50))  
+ BEGIN
+
+     DECLARE asignacion INT;
+     DECLARE registros INT;
+
+ DECLARE nueva_cantidad int;
+ DECLARE cantidad_actual int;
+
+ DECLARE tmp_cod_producto INT;
+ DECLARE tmp_cant_producto INT;
+ DECLARE a INT;
+ SET a = 1;
+  
+     CREATE TEMPORARY TABLE tbl_tmp_tokenuser(
+         id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+         cod_prod BIGINT,
+         cant_prod INT
+     );	
+     SET registros = (SELECT COUNT(*) FROM detalle_temp WHERE token_user = token);
+     IF registros > 0 THEN
+      
+         INSERT INTO tbl_tmp_tokenuser(cod_prod, cant_prod) SELECT codproducto, cantidad FROM detalle_temp WHERE  token_user = token;
+
+         INSERT INTO asignacion (usuario, codemple) VALUES (cod_usuario, codemple);
+         SET asignacion = LAST_INSERT_ID();
+
+       
+         INSERT INTO detalleasig (noasig, codproducto, cantidad) 
+         SELECT (asignacion) as noasig, codproducto,cantidad FROM detalle_temp WHERE token_user = token;
+
+
+         WHILE a <= registros DO
+             SELECT cod_prod, cant_prod INTO tmp_cod_producto, tmp_cant_producto FROM tbl_tmp_tokenuser WHERE id = a;
+          
+             SELECT cantidad INTO cantidad_actual FROM producto WHERE codproducto = tmp_cod_producto;
+             
+             SET nueva_cantidad = cantidad_actual - tmp_cant_producto;
+             UPDATE producto SET cantidad = nueva_cantidad WHERE codproducto = tmp_cod_producto;
+             SET a = a + 1;
+         END WHILE;
+         
+         -- Eliminar detalles temporales
+         DELETE FROM detalle_temp WHERE token_user = token;
+         	
+         -- Limpiar tabla temporal
+         TRUNCATE TABLE tbl_tmp_tokenuser;
+         
+        SELECT * FROM asignacion WHERE noasig = asignacion;
+        
+        ELSE 
+        SELECT 0;
+END IF;
+END;$$
+DELIMITER ;

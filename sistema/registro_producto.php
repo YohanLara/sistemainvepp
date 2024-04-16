@@ -4,30 +4,51 @@ include "../conexion.php";
 
 if (!empty($_POST)) {
     $alert = "";
-    if (empty($_POST['descripcion']) || empty($_POST['cantidad']) || $_POST['cantidad'] < 0) {
+    if (empty($_POST['descripcion']) || empty($_POST['cantidad']) || empty($_POST['codproducto']) || $_POST['cantidad'] < 0) {
         $alert = '<div class="alert alert-danger" role="alert">
-                    Los campos descripcion y cantidad son obligatorios
+                    Los campos descripción, cantidad y código del producto son obligatorios
                   </div>';
     } else {
+        $codproducto = $_POST['codproducto'];
         $descripcion = $_POST['descripcion'];
         $cantidad = $_POST['cantidad'];
         $talla = $_POST['talla'];
         $usuario_id = $_SESSION['idUser'];
 
-        $query_insert = mysqli_query($conexion, "INSERT INTO producto(descripcion,cantidad,talla,usuario_id) values ('$descripcion', '$cantidad','$talla','$usuario_id')");
-        
-        if ($query_insert) {
-            $alert = '<div class="alert alert-success" role="alert">
-                        Producto Registrado
+        $query = mysqli_query($conexion, "SELECT * FROM producto where codproducto = '$codproducto'");
+        $result = mysqli_num_rows($query);
+
+        if ($result > 0) {
+            $alert = '<div class="alert alert-danger" role="alert">
+                        El código de producto ya existe
                       </div>';
         } else {
-            $alert = '<div class="alert alert-danger" role="alert">
-                        Error al registrar el producto
-                      </div>';
+            // Insertar el producto en la tabla de productos
+            $query_insert = mysqli_query($conexion, "INSERT INTO producto(codproducto, descripcion, cantidad, talla, usuario_id) VALUES ('$codproducto', '$descripcion', '$cantidad', '$talla', '$usuario_id')");
+
+            if ($query_insert) {
+                // Insertar la entrada en la tabla de entradas
+                $query_insert_entrada = mysqli_query($conexion, "INSERT INTO entradas(codproducto, cantidad, usuario_id) VALUES ('$codproducto', '$cantidad', '$usuario_id')");
+
+                if ($query_insert_entrada) {
+                    $alert = '<div class="alert alert-success" role="alert">
+                                Producto registrado 
+                              </div>';
+                } else {
+                    $alert = '<div class="alert alert-danger" role="alert">
+                                Error al registrar la entrada
+                              </div>';
+                }
+            } else {
+                $alert = '<div class="alert alert-danger" role="alert">
+                            Error al registrar el producto
+                          </div>';
+            }
         }
     }
 }
 ?>
+
 
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -47,6 +68,10 @@ if (!empty($_POST)) {
         <?php echo isset($alert) ? $alert : ''; ?>
           
                 <div class="form-group">
+                    <label for="codproducto">Codigo De Producto</label>
+                    <input type="text" placeholder="Ingrese codigo de producto" class="form-control" name="codproducto" id="codproducto" required>
+                </div>
+                <div class="form-group">
                     <label for="descripcion">Descripcion</label>
                     <input type="text" placeholder="Ingrese nombre del producto" name="descripcion" id="descripcion" class="form-control">
                 </div>
@@ -58,6 +83,7 @@ if (!empty($_POST)) {
                     <label for="talla">Talla</label>
                     <input type="text" placeholder="Ingrese talla" class="form-control" name="talla" id="talla">
                 </div>
+                    
                 <input type="submit" value="Guardar producto" class="btn btn-primary">
             </form>
         </div>

@@ -37,6 +37,7 @@ if (!empty($_SESSION['active'])) { // Verifica si ya hay una sesión activa
     }
   }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -74,8 +75,9 @@ if (!empty($_SESSION['active'])) { // Verifica si ya hay una sesión activa
           <div class="card-body p-0">
            <!-- Fila anidada dentro del cuerpo de la tarjeta -->
             <div class="row">
-              <div class="col-lg-6 d-none d-lg-block bg-login-image">
-                <img src="" class="">
+              <div class="col-lg-6 d-none d-lg-block   ">
+              <img src="sistema/img/logo-pointer.png" width="440" height="300" style="margin:40px;">
+               
               </div>
               <div class="col-lg-6">
                 <div class="p-5">
@@ -87,10 +89,21 @@ if (!empty($_SESSION['active'])) { // Verifica si ya hay una sesión activa
                     <div class="form-group">
                       <label for="">Usuario</label>
                       <input type="text" class="form-control" placeholder="Usuario" name="usuario"></div>
-                    <div class="form-group">
-                      <label for="">Contraseña</label>
-                      <input type="password" class="form-control" placeholder="Contraseña" name="clave">
-                    </div>
+                      <div class="form-group">
+                      <div class="form-group">
+
+          <label for="">Contraseña</label>
+          <div class="input-group">
+ 
+        <input type="password" class="form-control" name="clave" id="passwordInput" placeholder="Contraseña">
+        <div class="input-group-append">
+        <span class="input-group-text">
+        <i class="fas fa-eye password-toggle" onclick="togglePasswordVisibility()"></i>
+        </span>  
+        </div>
+        </div>
+        </div>
+
                     <input type="submit" value="Iniciar" class="btn btn-primary">
                     <hr>
                   </form>
@@ -113,10 +126,44 @@ if (!empty($_SESSION['active'])) { // Verifica si ya hay una sesión activa
 
   <!-- Core plugin JavaScript-->
   <script src="sistema/vendor/jquery-easing/jquery.easing.min.js"></script>
-
   <!-- Custom scripts for all pages-->
   <script src="sistema/js/sb-admin-2.min.js"></script>
 
+  <!-- Script para ocultar las alertas después de 2 segundos -->
+  <script>
+    $(document).ready(function() {
+      setTimeout(function() {
+        $(".alert").fadeOut();
+      }, 2000);
+    });
+  </script>
+  
+
+  <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById("passwordInput");
+            const passwordToggle = document.querySelector(".password-toggle");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text"; // Mostrar contraseña
+                passwordToggle.classList.remove("fa-eye");
+                passwordToggle.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password"; // Ocultar contraseña
+                passwordToggle.classList.remove("fa-eye-slash");
+                passwordToggle.classList.add("fa-eye");
+            }
+        }
+    </script>
+
+
+
+    <script src="https://kit.fontawesome.com/544c8047fc.js" crossorigin="anonymous"></script> <!-- Font Awesome para iconos -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>
+
+
+
+

@@ -2,7 +2,7 @@
 <footer class="sticky-footer bg-white">
   <div class="container my-auto">
     <div class="copyright text-center my-auto">
-    <span>Copyright &copy; KYLT Pointer Instrument <?php echo date("Y"); ?></span>
+    <span>Copyright &copy; Kevin yohan Pointer Instrument <?php echo date("Y"); ?></span>
     </div>
   </div>
 </footer>
@@ -47,12 +47,14 @@
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 <script src="js/all.min.js"></script>
 
+
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
 <script src="js/jquery.dataTables.min.js"></script>
 <script src="js/dataTables.bootstrap4.min.js"></script>
 <script src="js/sweetalert2@10.js"></script>
 <script type="text/javascript" src="js/producto.js"></script>
+
 <script type="text/javascript">
  
  $(document).ready(function() {
@@ -88,11 +90,13 @@
   var usuarioid = '<?php echo $_SESSION['idUser']; ?>'; // Variable para almacenar el ID de usuar
 
   // Llama a una función para buscar detalles relacionados con el usuario
-  searchForDetalle(usuarioid);
+  // FALTA UNA FUNCION SEARCH
+
 });
 
 </script>
 
 </body>
+
 
 </html>
